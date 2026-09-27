@@ -1,4 +1,4 @@
-# Steam Deck 变 Windows 盘符 · 小白教程
+# DeckDrive · Steam Deck 变 Windows 盘符 · 小白教程
 
 **[English](README.md)** | 简体中文
 
@@ -46,7 +46,7 @@
 1. 用 USB-C 线把 Deck 和电脑连起来（Deck 保持开机，游戏模式、桌面模式都行）。
 2. 等 10 秒左右，Windows 会识别出一个新的"网卡"（这是正常现象，就是 Deck 假装的）。
 3. 以管理员身份运行 `setup.ps1`，步骤如下：
-   - 打开 `windows` 文件夹，在地址栏单击，**复制这个文件夹的路径**（形如 `C:\...\steamdeck-usb-drive-for-windows\windows`）。
+   - 打开 `windows` 文件夹，在地址栏单击，**复制这个文件夹的路径**（形如 `C:\...\DeckDrive\windows`）。
    - 按 `Win + X` → 选择「**终端(管理员)**」或「**Windows PowerShell (管理员)**」，弹出"是否允许更改"点**是**。
    - 在黑色窗口里依次粘贴执行下面两行（第一行换成你刚才复制的路径）：
      ```powershell
