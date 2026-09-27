@@ -1,0 +1,14 @@
+[Unit]
+Description=Steam Deck USB network gadget
+After=local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# Change rndis to ncm if your Windows 11 no longer supports RNDIS
+Environment=FUNC=rndis
+ExecStart=/home/deck/usb-gadget.sh start ${FUNC}
+ExecStop=/home/deck/usb-gadget.sh stop
+
+[Install]
+WantedBy=multi-user.target
