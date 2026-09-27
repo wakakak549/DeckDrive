@@ -1,4 +1,4 @@
-# Steam Deck USB Drive for Windows
+# DeckDrive — Steam Deck USB Drive for Windows
 
 English | **[简体中文](README.zh-CN.md)**
 
@@ -62,7 +62,7 @@ Setup has two one-time steps (~5 minutes each). Daily use takes 10 seconds.
 1. Connect the Deck to the PC with the USB-C cable (Deck powered on; Gaming Mode or Desktop Mode both fine).
 2. Wait ~10 seconds. Windows will detect a new "network adapter" — that's the Deck pretending to be one. This is expected.
 3. Run `setup.ps1` as administrator:
-   - Open the `windows` folder, click the address bar, and **copy the folder path** (like `C:\...\steamdeck-usb-drive-for-windows\windows`).
+   - Open the `windows` folder, click the address bar, and **copy the folder path** (like `C:\...\DeckDrive\windows`).
    - Press `Win + X` → choose **Terminal (Admin)** or **Windows PowerShell (Admin)**, click **Yes** on the prompt.
    - Paste these two lines (replace the first one with your copied path):
      ```powershell
@@ -124,6 +124,9 @@ Just re-run `./install.sh` on the Deck (Step 1.6).
 
 **Q: How fast is it?**
 Typically 50–150 MB/s depending on cable and port. Great for large files; thousands of tiny files will be slower — that's normal.
+
+**Q: Why is my C: drive busy while copying files?**
+Older versions used `--vfs-cache-mode writes`, which staged every file on C: before uploading. This is now set to `minimal`: plain copies stream directly without touching C:, and the cache (`C:\Users\you\AppData\Local\rclone\vfs`) is only used temporarily when you edit files in place on the drive.
 
 **Q: Is it secure?**
 The "network" contains only your PC and your Deck. The password never leaves your hands; nothing goes through the internet.

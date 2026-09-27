@@ -12,7 +12,7 @@ if errorlevel 1 (
 )
 
 echo [1/2] Mounting Deck home folder as drive X: ...
-start "Steam Deck X" /min rclone mount deck:/home/deck X: --vfs-cache-mode writes --volname "Steam Deck"
+start "Steam Deck X" /min rclone mount deck:/home/deck X: --vfs-cache-mode minimal --volname "Steam Deck"
 timeout /t 3 >nul
 if exist X:\ (
     echo       OK - X: is ready.
@@ -23,7 +23,7 @@ if exist X:\ (
 )
 
 echo [2/2] Mounting Deck SD card as drive Y: ...
-start "Steam Deck Y" /min rclone mount deck:/run/media/mmcblk0p1 Y: --vfs-cache-mode writes --volname "Deck SD Card"
+start "Steam Deck Y" /min rclone mount deck:/run/media/mmcblk0p1 Y: --vfs-cache-mode minimal --volname "Deck SD Card"
 timeout /t 3 >nul
 if exist Y:\ (
     echo       OK - Y: is ready ^(SD card^).

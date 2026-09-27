@@ -1,4 +1,4 @@
-# Steam Deck 变 Windows 盘符 · 小白教程
+# DeckDrive · Steam Deck 变 Windows 盘符 · 小白教程
 
 **[English](README.md)** | 简体中文
 
@@ -46,7 +46,7 @@
 1. 用 USB-C 线把 Deck 和电脑连起来（Deck 保持开机，游戏模式、桌面模式都行）。
 2. 等 10 秒左右，Windows 会识别出一个新的"网卡"（这是正常现象，就是 Deck 假装的）。
 3. 以管理员身份运行 `setup.ps1`，步骤如下：
-   - 打开 `windows` 文件夹，在地址栏单击，**复制这个文件夹的路径**（形如 `C:\...\steamdeck-usb-drive-for-windows\windows`）。
+   - 打开 `windows` 文件夹，在地址栏单击，**复制这个文件夹的路径**（形如 `C:\...\DeckDrive\windows`）。
    - 按 `Win + X` → 选择「**终端(管理员)**」或「**Windows PowerShell (管理员)**」，弹出"是否允许更改"点**是**。
    - 在黑色窗口里依次粘贴执行下面两行（第一行换成你刚才复制的路径）：
      ```powershell
@@ -113,6 +113,9 @@ Windows 端重新运行一次 `setup.ps1` 即可。
 
 **Q: 速度怎么样？**  
 一般 50~150 MB/s，取决于线材和接口。拷电影级别的文件很快；海量小文件（几千个）会慢一些，这是正常现象。
+
+**Q: 拷文件时 C 盘也在读写？**  
+旧版本用了 `--vfs-cache-mode writes`，文件会先缓存到 C 盘再上传。现已改为 `minimal` 模式：普通复制直接流式传输，不经过 C 盘；只有"在盘上直接编辑文件"时才临时使用缓存（缓存在 `C:\Users\你\AppData\Local\rclone\vfs`）。
 
 **Q: 安全吗？**  
 这条"网线"只有你的电脑和 Deck 两台设备，密码只有你知道，不经过任何外部网络。
