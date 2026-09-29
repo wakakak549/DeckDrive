@@ -1,68 +1,60 @@
-# Steam Deck USB Drive for Windows
+# DeckDrive — Steam Deck USB Drive for Windows
 
 English | **[简体中文](README.zh-CN.md)**
 
-Mount your Steam Deck as a Windows drive letter over a single USB-C cable — no WiFi needed.
+One USB-C cable. **Plug in and two drives appear automatically** (home folder + microSD card). Unplug and they eject themselves. No WiFi needed.
 
-After setup, plugging in the cable and double-clicking one file gives you two drives in Explorer:
+- **Home drive** → the Deck's `/home/deck` (screenshots, recordings, most game data)
+- **SD card drive** → the Deck's `/run/media/mmcblk0p1`
 
-- **X: (Steam Deck)** → the Deck's home folder (`/home/deck`)
-- **Y: (Deck SD Card)** → the Deck's microSD card (`/run/media/mmcblk0p1`)
-
-Copy, delete, rename — it works just like a USB flash drive. Typical speed: 50–150 MB/s.
+Drive letters are picked automatically (reuses your previous letters, scans backwards from Z if taken). Copy, delete, rename — just like a USB flash drive. Typical speed 50–150 MB/s, pure streaming with zero C: drive staging.
 
 ## How it works
 
-```
-Steam Deck  --(USB-C cable, acts as a virtual network adapter)-->  Windows
-SSH/SFTP file transfer over this mini-network
-rclone mount + WinFsp turns the remote folders into drive letters
-```
-
-No custom software was written for this — it glues together three mature, free, open-source pieces: Linux USB gadget mode (built into SteamOS), OpenSSH (built into SteamOS), and rclone + WinFsp on Windows.
+The Deck pretends to be a USB network adapter → a tiny private network forms between PC and Deck → files travel over SSH/SFTP → rclone + WinFsp turns remote folders into drive letters. A tray app detects plug/unplug and mounts automatically.
 
 ## What you need
 
 - A Steam Deck (you'll use **Desktop Mode** once)
-- A **USB-C data cable** (a charge-only cable will NOT work; a phone's original cable is usually fine)
-- A Windows 10 / 11 PC
-
-Setup has two one-time steps (~5 minutes each). Daily use takes 10 seconds.
+- A **USB-C data cable** (charge-only cables will NOT work; a phone's original cable is usually fine)
+- A Windows 10 / 11 PC (.NET 4.8 is built into Windows — the tray app runs as-is, no runtime to install)
 
 ---
 
-## Step 1: Steam Deck setup (one-time)
+## Step 1: Steam Deck setup (one-time, ~5 min)
 
 1. Copy the **3 files** from the `deck` folder (`usb-gadget.sh`, `usb-gadget.service`, `install.sh`) to your Deck.
-   - Easiest: copy them to a USB flash drive, plug it into the Deck (via dock/adapter), and copy them to the home folder in Desktop Mode.
+   - Easiest: copy to a USB flash drive, plug it into the Deck (via dock/adapter), copy to the home folder in Desktop Mode.
    - Or transfer wirelessly with KDE Connect / Warpinator.
 2. On the Deck, press the power button → **Switch to Desktop**.
-3. Open the app launcher → System → **Konsole** (the black terminal icon).
-4. Set a login password if you never did (you'll need it on the Windows side):
+3. Open the **Konsole** terminal.
+4. Set a login password if you never did (**you'll need it on the Windows side**):
    ```
    passwd
    ```
-   Type the new password twice (nothing shows on screen while typing — that's normal).
-5. Go to the folder where you put the 3 files, e.g.:
-   ```
-   cd ~/deck
-   ```
-6. Run the installer:
+5. Go to the folder with the files, e.g. `cd ~/deck`, then run:
    ```
    chmod +x install.sh
    ./install.sh
    ```
-   Enter your password when asked.
-7. When you see `Setup finished!`, you're done. The Deck side runs automatically on every boot from now on.
+6. `Setup finished!` means done. The Deck side runs automatically on every boot from now on.
 
 ---
 
-## Step 2: Windows setup (one-time)
+## Step 2: Windows setup (one-time, ~3 min)
 
+<<<<<<< HEAD
+1. Connect the Deck to the PC with the USB-C cable and wait ~10 seconds (Windows detects a new "network adapter" — that's expected).
+2. Double-click **`DeckDriveTray.exe`**.
+3. The **setup wizard** opens on first run and checks five things: rclone, WinFsp, adapter IP, connection config (enter your Deck password here), and reachability.
+   - Click the button on any red item; click **Yes** when Windows asks for permission.
+   - When everything is green, click **Done**.
+4. The app then lives quietly in the system tray: gray = not mounted, green = mounted.
+=======
 1. Connect the Deck to the PC with the USB-C cable (Deck powered on; Gaming Mode or Desktop Mode both fine).
 2. Wait ~10 seconds. Windows will detect a new "network adapter" — that's the Deck pretending to be one. This is expected.
 3. Run `setup.ps1` as administrator:
-   - Open the `windows` folder, click the address bar, and **copy the folder path** (like `C:\...\steamdeck-usb-drive-for-windows\windows`).
+   - Open the `windows` folder, click the address bar, and **copy the folder path** (like `C:\...\DeckDrive\windows`).
    - Press `Win + X` → choose **Terminal (Admin)** or **Windows PowerShell (Admin)**, click **Yes** on the prompt.
    - Paste these two lines (replace the first one with your copied path):
      ```powershell
@@ -76,63 +68,61 @@ Setup has two one-time steps (~5 minutes each). Daily use takes 10 seconds.
    - Asks for your Deck password (from Step 1)
    - Tests the connection by listing folders on the Deck
 5. `All done` means success.
+>>>>>>> 7d04159bf586ce7bb01dfd817211cc9b6bf3393c
 
-> If step 3 says "USB network adapter not found": replug the cable, try a different cable or USB port, then re-run `setup.ps1`.
+> The UI follows your system language; switch anytime via the tray menu "Language 语言".
 
 ---
 
-## Daily use (10 seconds)
+## Daily use (zero clicks)
 
-1. Plug in the USB-C cable.
-2. Double-click **`mount-deck.bat`** in the `windows` folder.
-3. After a few seconds, two drives appear:
-   - **X: (Steam Deck)** → home folder
-   - **Y: (Deck SD Card)** → microSD card
-   - Two minimized windows keep the drives alive — **don't close them**.
-4. When finished: double-click `unmount-deck.bat` to eject both drives, then unplug.
+- **Plug in** → both drives mount within seconds
+- **Unplug** → drives eject automatically
+- Tray menu: Mount / Unmount (manual control), Auto-mount on plug (toggle), Setup wizard, Language, Exit
 
-> If X: or Y: is already taken by another device, right-click `mount-deck.bat` → Edit, and change the letters to free ones (there are several places — change all of them).
+> Don't unplug during a file transfer — same rule as a USB flash drive.
 
-Tip: right-click `mount-deck.bat` → Send to → Desktop (create shortcut) for one-click mounting.
+---
+
+## Advanced: manual scripts (fallback)
+
+If you prefer not to use the tray app, or need a one-off on another PC:
+
+- `windows\setup.ps1`: command-line one-time setup (run in an admin PowerShell)
+- `windows\mount-deck.bat`: double-click to mount X: / Y:; `unmount-deck.bat` to eject
+- `app\build.bat`: rebuild the tray app yourself with Windows' built-in .NET compiler (source in `app\`)
 
 ---
 
 ## FAQ
 
-**Q: What exactly are X: and Y:?**
-- X: = the Deck's `/home/deck` (home folder — screenshots, recordings, most game data)
-- Y: = the microSD card (`/run/media/mmcblk0p1`). **If no card is inserted, Y: fails to mount but X: still works.**
-- Want the whole filesystem? Change `deck:/home/deck` to `deck:/` in the script (not recommended — easy to delete system files by accident).
+**Q: How are drive letters chosen?**
+Previous letters are reused when free; otherwise two free letters are scanned backwards from Z — the bigger one goes to the home folder, the smaller to the SD card. You don't need to remember letters; look for the volume labels "Steam Deck" and "Deck SD Card".
+
+**Q: What if no microSD card is inserted?**
+The SD card drive fails to mount; the home drive works normally.
+
+**Q: Why was my C: drive busy while copying (older versions)?**
+Previous versions used `--vfs-cache-mode writes/minimal`, which staged files on C:. The current version uses **`off`**: pure in-memory streaming, zero C: staging. Trade-off: editing files in place on the drive isn't supported; copy in/out works perfectly.
 
 **Q: Nothing happens when I plug in the cable?**
-- Try a cable you know can transfer data (a phone's original cable is the safest bet).
-- On the Deck, open Konsole and run `systemctl status usb-gadget` — a green `active (exited)` means it's working.
+- Try a cable you know can transfer data (the most common cause).
+- On the Deck, run `systemctl status usb-gadget` in Konsole — a green `active (exited)` means it's working.
 
 **Q: Newer Windows 11 doesn't recognize the network adapter?**
-Recent Windows 11 builds are phasing out the old RNDIS protocol. On the Deck, run:
-```
-sudo nano /etc/systemd/system/usb-gadget.service
-```
-Change `Environment=FUNC=rndis` to `Environment=FUNC=ncm`, press `Ctrl+O` then Enter to save, `Ctrl+X` to exit, then:
-```
-sudo systemctl daemon-reload && sudo systemctl restart usb-gadget
-```
-Re-run `setup.ps1` on the Windows side.
+Recent Windows 11 builds are phasing out RNDIS. On the Deck, run `sudo nano /etc/systemd/system/usb-gadget.service`, change `Environment=FUNC=rndis` to `ncm`, save, then `sudo systemctl daemon-reload && sudo systemctl restart usb-gadget`.
 
 **Q: Stopped working after a big SteamOS update?**
-Just re-run `./install.sh` on the Deck (Step 1.6).
+Re-run `./install.sh` on the Deck.
 
-**Q: How fast is it?**
-Typically 50–150 MB/s depending on cable and port. Great for large files; thousands of tiny files will be slower — that's normal.
+**Q: Why is my C: drive busy while copying files?**
+Older versions used `--vfs-cache-mode writes`, which staged every file on C: before uploading. This is now set to `minimal`: plain copies stream directly without touching C:, and the cache (`C:\Users\you\AppData\Local\rclone\vfs`) is only used temporarily when you edit files in place on the drive.
 
 **Q: Is it secure?**
-The "network" contains only your PC and your Deck. The password never leaves your hands; nothing goes through the internet.
+The "network" contains only your PC and your Deck. Your password lives only in the rclone config on your PC; nothing goes through the internet.
 
 **Q: I have DeckMTP installed?**
-Both solutions use the same USB controller — disable one of them:
-```
-sudo systemctl disable --now deckmtp   # disable DeckMTP
-```
+Both use the same USB controller — disable one of them: `sudo systemctl disable --now deckmtp`
 
 ---
 
