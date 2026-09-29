@@ -118,6 +118,9 @@ Re-run `./install.sh` on the Deck.
 **Q: Why is my C: drive busy while copying files?**
 Older versions used `--vfs-cache-mode writes`, which staged every file on C: before uploading. This is now set to `minimal`: plain copies stream directly without touching C:, and the cache (`C:\Users\you\AppData\Local\rclone\vfs`) is only used temporarily when you edit files in place on the drive.
 
+**Q: Why is my C: drive busy while copying files?**
+Older versions used `--vfs-cache-mode writes`, which staged every file on C: before uploading. This is now set to `minimal`: plain copies stream directly without touching C:, and the cache (`C:\Users\you\AppData\Local\rclone\vfs`) is only used temporarily when you edit files in place on the drive.
+
 **Q: Is it secure?**
 The "network" contains only your PC and your Deck. Your password lives only in the rclone config on your PC; nothing goes through the internet.
 
